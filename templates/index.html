@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>T-Note</title>
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+
+        <!-- Styles -->
+        <style>
+            pre, .http, .mw-code {
+                color: #000;
+                background-color: #f8f9fa;
+                border: 1px solid #eaecf0;
+                padding: 1em;
+                white-space: pre-wrap;
+                font-family: monospace;
+                margin: 13px 0 13px 0;
+                display: block;
+            }
+
+            .links > a {
+                color: #636b6f;
+                padding: 0 25px;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: .1rem;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+           
+           	/*下面是点击弹窗需要的样式*/
+	        .hide{
+	            display: none;
+	        }
+	        .c1{
+	            position: fixed;
+	            top:0;
+	            bottom: 0;
+	            left:0;
+	            right: 0;
+	            background: rgba(0,0,0,.5);
+	            z-index: 2;
+	        }
+	        .c2{
+	            background-color: white;
+	            position: fixed;
+	            width: 400px;
+	            height: 300px;
+	            top: 50%;
+	            left: 50%;
+	            z-index: 3;
+	            margin-top: -150px;
+	            margin-left: -200px;
+	            padding: 20px;
+	        }
+			#modal p {
+				margin-left:80px;
+			}
+	    	
+        </style>
+    </head>
+    <body>
+        <h2>Temporary notes</h2>
+    	<h4 style="color: #6c757d">* Each note is reserved for only one day.</h4>
+
+    	<button class="btn btn-default" onclick="Show();">Add one</button>
+	    
+	    {% for note in notes: %} 
+	    <h5>No.{{ note['no'] }} , {{ note['created'] }}</h5>
+	    {% if note['ishref']: %}
+	    <a class="http" href="{{ note['note'] }}">{{ note['note'] }}</a>
+	    {% else: %}
+	    <pre>{{ note['note'] }}</pre>
+	    {% endif %}
+	    {% endfor %}
+
+	    <br>
+	    
+
+	    <div id="shade" class="c1 hide"></div>
+		<div id="addnote" class="c2 hide">
+		    <form role="form" action="/add" method="post">
+                <label for="name">Add a note</label>
+                <br>
+                <textarea name="note" class="form-control" rows="20" cols="60"></textarea>
+                <br>
+                <button type="submit" class="btn btn-default">Add</button>
+                <button class="btn btn-default" onclick="Hide();">Cancel</button>
+	        </form>
+		</div>
+    </body>
+
+    <script>
+	    function Show(){
+	        document.getElementById('shade').classList.remove('hide');
+	        document.getElementById('addnote').classList.remove('hide');
+	    }
+	     function Hide(){
+	        document.getElementById('shade').classList.add('hide');
+	        document.getElementById('addnote').classList.add('hide');
+	    }
+	</script>
+</html>
