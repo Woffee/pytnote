@@ -74,16 +74,29 @@ def add():
     return """<script language='javascript' type='text/javascript'> window.location.href='/'; </script>"""
 
 
-if __name__ == "__main__":
-    try:
-        pool = redis.ConnectionPool(host=getConf('REDIS_HOST'), port=getConf('REDIS_PORT'), password=getConf('REDIS_PASSWORD'))
+try:
+    host = getConf('REDIS_HOST')
+    port = getConf('REDIS_PORT')
+    pwd  = getConf('REDIS_PASSWORD')
+
+    if host and port and pwd:
+        pool = redis.ConnectionPool(host=host, port=port, password=pwd)
         r = redis.Redis(connection_pool=pool)
         if r:
-            print('Connected Redis')
-            # Only for debugging while developing
-            app.run(host='127.0.0.1', debug=True, port=8070)
-    except Exception as e:
-        print("Connect Redis Error: ",e)
+            print("Connect Redis successed")
+        else:
+            print("Connect Redis failed")
+            exit(0)
+    else:
+        print("Get conf failed")
+        exit(0)
+except Exception as e:
+    print("Connect Redis Error: ",e)
+    exit(0)
+
+if __name__ == "__main__":
+    app.run(host='127.0.0.1', debug=True, port=8070)
+
 
 
     
