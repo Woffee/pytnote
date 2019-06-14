@@ -79,11 +79,11 @@ if __name__ == "__main__":
         pool = redis.ConnectionPool(host=getConf('REDIS_HOST'), port=getConf('REDIS_PORT'), password=getConf('REDIS_PASSWORD'))
         r = redis.Redis(connection_pool=pool)
         print('Connected Redis')
+        # Only for debugging while developing
+        app.run(host='127.0.0.1', debug=True, port=8070)
     except Exception as e:
         print("Connect Redis Error: ",e)
 
-    # Only for debugging while developing
-    app.run(host='127.0.0.1', debug=True, port=8070)
 
     
 
