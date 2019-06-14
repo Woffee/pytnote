@@ -48,7 +48,7 @@ def index():
     while i>=0:
         jsonStr = r.get(KEY_TNOTE+str(i))
         if jsonStr:
-            item = json.loads(jsonStr, encoding='utf-8')
+            item = json.loads(jsonStr.decode('utf-8'), encoding='utf-8')
             if item:
                 item['no']=i
                 item['ishref'] = True if item['note'].find('http') > -1 else False
