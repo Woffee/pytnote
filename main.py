@@ -8,7 +8,7 @@ import os
 import json
 
 app = Flask(__name__)
-app.before_request(checkRedis)
+
 
 conf = {}
 r = None
@@ -102,15 +102,10 @@ def checkRedis():
         print("Connect Redis Error: ",e)
         exit(0)
 
-if __name__ == "__main__":
-    # handler = logging.FileHandler('flask2.log', encoding='UTF-8')
-    # handler.setLevel(logging.DEBUG)
-    # logging_format = logging.Formatter('%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s')
-    # handler.setFormatter(logging_format)
-    # app.logger.addHandler(handler)
-    # app.logger.info('start')
+app.before_request(checkRedis)
 
-    
+if __name__ == "__main__":
+
     app.run(host='127.0.0.1', debug=True, port=8070)
 
 
