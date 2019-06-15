@@ -8,6 +8,8 @@ import os
 import json
 
 app = Flask(__name__)
+app.before_request(checkRedis)
+
 conf = {}
 r = None
 
@@ -108,7 +110,7 @@ if __name__ == "__main__":
     # app.logger.addHandler(handler)
     # app.logger.info('start')
 
-    app.before_request(checkRedis)
+    
     app.run(host='127.0.0.1', debug=True, port=8070)
 
 
