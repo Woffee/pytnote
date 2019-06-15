@@ -1,6 +1,7 @@
 from werkzeug.utils import secure_filename
-from flask import Flask,render_template,send_from_directory,jsonify,request
+from flask import Flask,render_template,send_from_directory,jsonify,request,redirect
 import time,datetime
+import logging
 import base64
 import redis
 import os
@@ -52,7 +53,6 @@ def index():
             if item:
                 item['no']=i
                 item['ishref'] = True if item['note'].find('http') > -1 else False
-                print(item)
                 notes.append(item)
         i = i-1
     return render_template('index.html',notes=notes)
@@ -71,30 +71,44 @@ def add():
         r.set(KEY_TNOTE + str(ma), json.dumps(item))
         r.expire(KEY_TNOTE + str(ma), 24*3600)
         incrMax()
-    return """<script language='javascript' type='text/javascript'> window.location.href='/'; </script>"""
+    return redirect('/')
 
+def checkRedis():
+    global r
+    if r:
+        print("Redis already inited   ")
+        return
+    try:
+        host = getConf('REDIS_HOST')
+        port = getConf('REDIS_PORT')
+        pwd  = getConf('REDIS_PASSWORD')
 
-try:
-    host = getConf('REDIS_HOST')
-    port = getConf('REDIS_PORT')
-    pwd  = getConf('REDIS_PASSWORD')
-
-    if host and port and pwd:
-        pool = redis.ConnectionPool(host=host, port=port, password=pwd)
-        r = redis.Redis(connection_pool=pool)
-        if r:
-            print("Connect Redis successed")
+        if host and port and pwd:
+            pool = redis.ConnectionPool(host=host, port=port, password=pwd)
+            r = redis.Redis(connection_pool=pool)
+            if r:
+                app.logger.info('Connect Redis successed')
+                print("Connect Redis successed")
+            else:
+                app.logger.error('Connect Redis failed')
+                print("Connect Redis failed")
+                exit(0)
         else:
-            print("Connect Redis failed")
+            print("Get conf failed")
             exit(0)
-    else:
-        print("Get conf failed")
+    except Exception as e:
+        print("Connect Redis Error: ",e)
         exit(0)
-except Exception as e:
-    print("Connect Redis Error: ",e)
-    exit(0)
 
 if __name__ == "__main__":
+    # handler = logging.FileHandler('flask2.log', encoding='UTF-8')
+    # handler.setLevel(logging.DEBUG)
+    # logging_format = logging.Formatter('%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s')
+    # handler.setFormatter(logging_format)
+    # app.logger.addHandler(handler)
+    # app.logger.info('start')
+
+    app.before_request(checkRedis)
     app.run(host='127.0.0.1', debug=True, port=8070)
 
 
