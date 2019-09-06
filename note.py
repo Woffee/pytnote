@@ -32,7 +32,8 @@ class Note:
             data = cursor.fetchall()
             return data
         except Exception as e:
-            print("get notes error:" + str(e))
+            logging.error("get notes error:" + str(e))
+            # print("get notes error:" + str(e))
         return []
 
     def addNote(self, note):
