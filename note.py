@@ -20,6 +20,7 @@ class Note:
             self.db = pymysql.connect(host, user, pwd, database)
         except Exception as e:
             logging.error(str(e))
+            exit(0)
 
     def getLast24hrsNotes(self):
         last_time = int(time.time()) - 24*3600
