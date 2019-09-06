@@ -24,7 +24,7 @@ class Note:
 
     def getLast24hrsNotes(self):
         last_time = int(time.time()) - 24*3600
-        sql = "select id,note,create_time from tnote where create_time >= %d" % (last_time)
+        sql = "select id,note,create_time from tnote where create_time >= %d order by id desc" % (last_time)
         # print(sql)
         try:
             cursor = self.db.cursor()
