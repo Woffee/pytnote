@@ -37,12 +37,12 @@ class Note:
 
     def addNote(self, note):
         nowtime = int(time.time())
-        sql = "insert into tnote (note, create_time) values ('%s', %d)" % (note, nowtime)
+        sql = "insert into tnote (note, create_time) values (%s, %s)"
         # print(sql)
 
         try:
             cursor = self.db.cursor()
-            cursor.execute(sql)
+            cursor.execute(sql, (note, str(nowtime)) )
             self.db.commit()
         except Exception as e:
             logging.error("insert note error:" + str(e))
