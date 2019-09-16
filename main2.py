@@ -51,7 +51,7 @@ def add():
 def checkMysql():
     global noteObj,config
     if noteObj:
-        logging.info("MySQL already connected")
+        # logging.info("MySQL already connected")
         return
     try:
         noteObj = Note(config['MYSQL']['HOST'],
@@ -62,8 +62,14 @@ def checkMysql():
         logging.error("Connect MySQL error: "+str(e))
         exit(0)
 
+# def closeMysql():
+#     global noteObj
+#     if noteObj:
+#         noteObj.closeDB()
+#         print("close db....")
 
 app.before_request(checkMysql)
+# app.after_request(closeMysql)
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', debug=True, port=8070)
