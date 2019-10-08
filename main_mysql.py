@@ -20,7 +20,7 @@ today = time.strftime("%Y-%m-%d", time.localtime())
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(filename)s line: %(lineno)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=BASE_DIR + '/log/tnote-' + today + '.log')
+                    filename=BASE_DIR + '/logs/tnote-' + today + '.log')
 
 
 @app.route("/")
