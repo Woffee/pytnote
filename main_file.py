@@ -71,7 +71,16 @@ def add():
         # Write chunks of text data
         with open(filepath, 'at') as f:
             f.write(json.dumps(item) + "\n")
-    return redirect('/')
+
+        return json.dumps({
+            "success":True,
+            "note": note,
+            "created": created
+        })
+    return json.dumps({
+        "success": False,
+        "message": "Unknown error"
+    })
 
 
 # app.before_request(checkMysql)
