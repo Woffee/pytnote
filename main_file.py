@@ -82,6 +82,12 @@ def add():
         "message": "Unknown error"
     })
 
+@app.route("/download/<filename>", methods=['GET'])
+def download_file(filename):
+    down_path = BASE_DIR + '/files/'
+    if not os.path.exists(down_path) :
+        os.makedirs(down_path) 
+    return send_from_directory(down_path, filename, as_attachment=True)
 
 # app.before_request(checkMysql)
 # app.after_request(closeMysql)
