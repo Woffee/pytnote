@@ -56,6 +56,31 @@ def index():
 
     return render_template('index.html', notes=notes)
 
+@app.route("/list", methods=['GET'])
+def list():
+    yesterday = str(datetime.date.today() + datetime.timedelta(-1))
+    today = str(datetime.date.today())
+
+    d1 = get_notes(yesterday)
+    d2 = get_notes(today)
+
+    notes = []
+    d1.extend(d2)
+
+    i = 1
+    for d in d1:
+        item = {}
+        item['no'] = i
+        item['note'] = d['note']
+        item['created'] = d['created']
+        item['ishref'] = True if item['note'].find('http') > -1 else False
+        notes.append(item)
+        i = i + 1
+
+    return json.dumps({
+        "success": True,
+        "notes": notes
+    })
 
 @app.route("/add", methods=['POST'])
 def add():
