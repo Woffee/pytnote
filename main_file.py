@@ -77,7 +77,7 @@ def list():
         notes.append(item)
         i = i + 1
 
-    return json.dumps({
+    return jsonify({
         "success": True,
         "notes": notes
     })
